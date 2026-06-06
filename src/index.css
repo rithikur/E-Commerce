@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-dark: #3A2D28;
+  --color-brand-primary: #A48374;
+  --color-brand-secondary: #CBAD8D;
+  --color-brand-tertiary: #D1C7BD;
+  --color-brand-light: #EBE3DB;
+  --color-brand-bg: #F1EDE6;
+
+  --font-heading: "Cormorant Garamond", serif;
+  --font-body: "Jost", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-brand-dark font-body antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
