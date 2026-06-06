@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../components/ui/Logo';
 
 export default function LandingPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +17,7 @@ export default function LandingPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-brand-bg flex items-center justify-center">
-        <div className="w-8 h-8 border-[1.5px] border-brand-dark/20 border-t-brand-dark rounded-full animate-spin"></div>
+        <Logo className="w-12 h-12 animate-pulse" />
       </div>
     );
   }
@@ -24,9 +25,12 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col justify-between p-8 md:p-16 animate-in fade-in duration-1000">
       <header className="flex justify-between items-center w-full max-w-7xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-heading font-semibold tracking-wide text-brand-dark">
-          UB THREADS
-        </h1>
+        <div className="flex items-center gap-3">
+          <Logo className="w-8 h-8 md:w-10 md:h-10" />
+          <h1 className="text-2xl md:text-3xl font-heading font-semibold tracking-wide text-brand-dark">
+            UB THREADS
+          </h1>
+        </div>
         <button 
           onClick={() => navigate('/admin/login')}
           className="text-sm font-medium tracking-widest uppercase text-brand-dark hover:text-brand-primary transition-colors border-b border-transparent hover:border-brand-primary pb-1"

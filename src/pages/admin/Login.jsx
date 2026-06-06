@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../../components/ui/Logo';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -21,13 +22,16 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <h1 
-          className="text-3xl font-heading font-semibold text-brand-dark cursor-pointer tracking-wide" 
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center flex flex-col items-center">
+        <div 
+          className="cursor-pointer flex flex-col items-center gap-4 hover:opacity-80 transition-opacity"
           onClick={() => navigate('/')}
         >
-          UB THREADS
-        </h1>
+          <Logo className="w-12 h-12" />
+          <h1 className="text-3xl font-heading font-semibold text-brand-dark tracking-wide">
+            UB THREADS
+          </h1>
+        </div>
         <h2 className="mt-6 text-xl text-brand-dark/80 tracking-tight">
           Admin Portal
         </h2>

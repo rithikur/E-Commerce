@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Shirt, LayoutGrid } from 'lucide-react';
+import { LogOut, LayoutGrid } from 'lucide-react';
+import Logo from '../ui/Logo';
 
 export default function AdminLayout({ children }) {
   const navigate = useNavigate();
@@ -14,9 +15,7 @@ export default function AdminLayout({ children }) {
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-brand-tertiary/60 flex flex-col hidden md:flex fixed inset-y-0 z-10">
         <div className="p-6 border-b border-brand-tertiary/60 flex items-center gap-3">
-          <div className="bg-brand-dark p-2 text-brand-light">
-            <Shirt className="w-6 h-6" strokeWidth={1.5} />
-          </div>
+          <Logo className="w-8 h-8" />
           <span className="font-heading font-bold text-xl tracking-wide text-brand-dark">UB THREADS</span>
         </div>
         
@@ -42,9 +41,9 @@ export default function AdminLayout({ children }) {
       <main className="flex-1 md:ml-64 flex flex-col min-h-screen relative">
         {/* Mobile Header */}
         <header className="md:hidden bg-white border-b border-brand-tertiary/60 p-4 flex items-center justify-between sticky top-0 z-20">
-          <div className="flex items-center gap-2">
-            <Shirt className="w-6 h-6 text-brand-dark" strokeWidth={1.5} />
-            <span className="font-heading font-bold text-lg tracking-wide">UB THREADS</span>
+          <div className="flex items-center gap-3">
+            <Logo className="w-6 h-6" />
+            <span className="font-heading font-bold text-lg tracking-wide text-brand-dark">UB THREADS</span>
           </div>
           <button onClick={handleLogout} className="p-2 text-red-600 hover:bg-red-50">
             <LogOut className="w-5 h-5" />
