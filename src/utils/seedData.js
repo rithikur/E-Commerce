@@ -1,13 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export const seedDatabase = () => {
-  const isSeeded = localStorage.getItem('ub_seeded_v5');
+  const isSeeded = localStorage.getItem('ub_seeded_v6');
   
   if (!isSeeded) {
     // Force reset for the new premium Indian images and INR prices
     localStorage.removeItem('ub_products');
     localStorage.removeItem('ub_categories');
-    localStorage.setItem('ub_seeded_v5', 'true');
+    localStorage.removeItem('ub_customers');
+    localStorage.setItem('ub_seeded_v6', 'true');
   }
 
   const existingCategories = localStorage.getItem('ub_categories');
@@ -34,6 +35,20 @@ export const seedDatabase = () => {
 
   if (didSeedCategories) {
     localStorage.setItem('ub_categories', JSON.stringify(categories));
+  }
+
+  // Seed Default Customer
+  let existingCustomers = localStorage.getItem('ub_customers');
+  if (!existingCustomers) {
+    const defaultCustomer = [{
+      id: `cust_${uuidv4().substring(0,6)}`,
+      name: "Test Customer",
+      email: "test@ubthreads.com",
+      phone: "+91 98765 43210",
+      password: "password123",
+      createdAt: new Date().toISOString()
+    }];
+    localStorage.setItem('ub_customers', JSON.stringify(defaultCustomer));
   }
 
   // Seed Products

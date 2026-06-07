@@ -2,9 +2,12 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PublicLayout from './components/layout/PublicLayout';
 import LandingPage from './pages/LandingPage';
 import Shop from './pages/Shop';
+import Auth from './pages/Auth';
 import Login from './pages/admin/Login';
 import Categories from './pages/admin/Categories';
 import Products from './pages/admin/Products';
+import Customers from './pages/admin/Customers';
+import Preloader from './components/ui/Preloader';
 import { seedDatabase } from './utils/seedData';
 
 // Execute immediately on module load so Vite HMR picks it up without a hard refresh
@@ -22,6 +25,7 @@ function ProtectedRoute({ children }) {
 function App() {
   return (
     <BrowserRouter>
+      <Preloader />
       <Routes>
         {/* Public Routes with Navbar */}
         <Route 
@@ -32,8 +36,12 @@ function App() {
           path="/shop" 
           element={<PublicLayout><Shop /></PublicLayout>} 
         />
+        <Route 
+          path="/auth" 
+          element={<PublicLayout><Auth /></PublicLayout>} 
+        />
         
-        {/* Auth Route */}
+        {/* Admin Auth Route */}
         <Route path="/admin/login" element={<Login />} />
         
         {/* Protected Admin Routes */}
@@ -50,6 +58,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Products />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/customers" 
+          element={
+            <ProtectedRoute>
+              <Customers />
             </ProtectedRoute>
           } 
         />

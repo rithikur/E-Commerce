@@ -1,6 +1,6 @@
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, onClick }) {
   return (
-    <div className="group flex flex-col cursor-pointer">
+    <div className="group flex flex-col cursor-pointer" onClick={() => onClick && onClick(product)}>
       {/* Image Container */}
       <div className="relative aspect-[3/4] overflow-hidden bg-brand-tertiary/20 mb-4">
         {product.image ? (

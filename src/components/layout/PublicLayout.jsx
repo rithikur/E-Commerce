@@ -1,11 +1,26 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../ui/Logo';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Menu, X, LogOut, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function PublicLayout({ children }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [customerSession, setCustomerSession] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const session = localStorage.getItem('ub_customer_session');
+    if (session) {
+      setCustomerSession(JSON.parse(session));
+    }
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('ub_customer_session');
+    setCustomerSession(null);
+    navigate('/');
+  };
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -17,12 +32,12 @@ export default function PublicLayout({ children }) {
       {/* Navbar */}
       <nav className="bg-brand-bg border-b border-brand-tertiary/40 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20">
+          <div className="flex justify-between h-16">
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex items-center gap-3 group">
-                <Logo className="w-8 h-8 transition-transform group-hover:scale-105" />
-                <span className="font-heading font-semibold text-2xl tracking-wide text-brand-dark">UB THREADS</span>
+                <Logo className="w-6 h-6 transition-transform group-hover:scale-105" />
+                <span className="font-heading font-semibold text-xl tracking-wide text-brand-dark">UB THREADS</span>
               </Link>
             </div>
 
@@ -41,12 +56,24 @@ export default function PublicLayout({ children }) {
                   {link.name}
                 </Link>
               ))}
-              <Link 
-                to="/admin/login"
-                className="text-sm font-medium tracking-widest uppercase text-brand-dark border border-brand-dark px-4 py-2 hover:bg-brand-dark hover:text-brand-light transition-colors"
-              >
-                Admin
-              </Link>
+              
+              {customerSession ? (
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-sm font-medium tracking-widest uppercase text-brand-dark/70 hover:text-red-600 transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
+              ) : (
+                <Link 
+                  to="/auth"
+                  className="flex items-center gap-2 text-sm font-medium tracking-widest uppercase text-brand-dark/70 hover:text-brand-dark transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  Login
+                </Link>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -77,13 +104,25 @@ export default function PublicLayout({ children }) {
                   {link.name}
                 </Link>
               ))}
-              <Link
-                to="/admin/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-3 py-4 text-base font-medium tracking-wide uppercase text-brand-dark"
-              >
-                Admin Login
-              </Link>
+              {customerSession ? (
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-4 text-base font-medium tracking-wide uppercase text-red-600 border-b border-brand-tertiary/20"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block px-3 py-4 text-base font-medium tracking-wide uppercase text-brand-dark border-b border-brand-tertiary/20"
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         )}
@@ -98,7 +137,9 @@ export default function PublicLayout({ children }) {
       <footer className="bg-white border-t border-brand-tertiary/40 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-sm text-brand-dark/60 tracking-wider uppercase">
           <p>&copy; {new Date().getFullYear()} UB Threads.</p>
-          <p className="mt-4 md:mt-0">Premium Apparel</p>
+          <p className="mt-4 md:mt-0 flex gap-4">
+            <Link to="/admin/login" className="hover:text-brand-dark transition-colors">Admin Portal</Link>
+          </p>
         </div>
       </footer>
     </div>
