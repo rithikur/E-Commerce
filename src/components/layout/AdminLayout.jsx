@@ -1,5 +1,5 @@
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { LogOut, LayoutGrid, Package, Users } from 'lucide-react';
+import { LogOut, LayoutGrid, Package, Users, ClipboardList } from 'lucide-react';
 import Logo from '../ui/Logo';
 
 export default function AdminLayout({ children }) {
@@ -12,6 +12,7 @@ export default function AdminLayout({ children }) {
   };
 
   const navLinks = [
+    { name: 'Orders', path: '/admin/orders', icon: ClipboardList },
     { name: 'Categories', path: '/admin/categories', icon: LayoutGrid },
     { name: 'Products', path: '/admin/products', icon: Package },
     { name: 'Customers', path: '/admin/customers', icon: Users }

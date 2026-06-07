@@ -1,12 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import ProductCard from '../components/ui/ProductCard';
-import ProductDetailsModal from '../components/ui/ProductDetailsModal';
 import { SlidersHorizontal } from 'lucide-react';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   
   // Filters
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -147,7 +145,6 @@ export default function Shop() {
                   <ProductCard 
                     key={product.id} 
                     product={product} 
-                    onClick={setSelectedProduct} 
                   />
                 ))}
               </div>
@@ -155,12 +152,6 @@ export default function Shop() {
           </div>
         </div>
       </div>
-      
-      <ProductDetailsModal 
-        isOpen={!!selectedProduct} 
-        onClose={() => setSelectedProduct(null)} 
-        product={selectedProduct} 
-      />
     </>
   );
 }

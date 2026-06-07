@@ -1,6 +1,13 @@
-export default function ProductCard({ product, onClick }) {
+import { useNavigate } from 'react-router-dom';
+
+export default function ProductCard({ product }) {
+  const navigate = useNavigate();
+
   return (
-    <div className="group flex flex-col cursor-pointer" onClick={() => onClick && onClick(product)}>
+    <div 
+      className="group flex flex-col cursor-pointer" 
+      onClick={() => navigate(`/product/${product.id}`)}
+    >
       {/* Image Container */}
       <div className="relative aspect-[3/4] overflow-hidden bg-brand-tertiary/20 mb-4">
         {product.image ? (
