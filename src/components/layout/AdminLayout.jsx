@@ -1,14 +1,20 @@
-import { useNavigate } from 'react-router-dom';
-import { LogOut, LayoutGrid } from 'lucide-react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { LogOut, LayoutGrid, Package } from 'lucide-react';
 import Logo from '../ui/Logo';
 
 export default function AdminLayout({ children }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem('ub_admin_session');
     navigate('/admin/login');
   };
+
+  const navLinks = [
+    { name: 'Categories', path: '/admin/categories', icon: LayoutGrid },
+    { name: 'Products', path: '/admin/products', icon: Package }
+  ];
 
   return (
     <div className="min-h-screen bg-brand-bg flex">
@@ -20,10 +26,24 @@ export default function AdminLayout({ children }) {
         </div>
         
         <nav className="flex-1 p-4 space-y-2">
-          <a href="#" className="flex items-center gap-3 px-4 py-3 bg-brand-bg text-brand-dark font-medium border border-brand-tertiary/60 transition-colors uppercase text-sm tracking-wider">
-            <LayoutGrid className="w-4 h-4 text-brand-dark" />
-            Categories
-          </a>
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const isActive = location.pathname === link.path;
+            return (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={`flex items-center gap-3 px-4 py-3 font-medium transition-colors uppercase text-sm tracking-wider border ${
+                  isActive 
+                    ? 'bg-brand-bg text-brand-dark border-brand-tertiary/60' 
+                    : 'text-brand-dark/70 border-transparent hover:bg-brand-bg/50'
+                }`}
+              >
+                <Icon className={`w-4 h-4 ${isActive ? 'text-brand-dark' : 'text-brand-dark/70'}`} />
+                {link.name}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="p-4 border-t border-brand-tertiary/60">
