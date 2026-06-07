@@ -1,0 +1,31 @@
+name: Scheduled Release Merge
+
+on:
+  schedule:
+    # 9:00 AM IST (UTC+5:30) is 3:30 AM UTC.
+    # Runs on June 9th at 3:30 AM UTC.
+    - cron: '30 3 9 6 *'
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
+
+jobs:
+  merge-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge release branch
+        run: |
+          git fetch origin hold-release
+          git merge origin/hold-release --no-ff -m "chore: scheduled merge of hold-release into main"
+          git push origin main
