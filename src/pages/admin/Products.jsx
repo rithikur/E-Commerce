@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Plus, Pencil, Trash2, Search, ImageIcon, Star } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, ImageIcon, Star, Upload, X } from 'lucide-react';
 import AdminLayout from '../../components/layout/AdminLayout';
 import Modal from '../../components/ui/Modal';
 
@@ -25,7 +25,8 @@ export default function Products() {
     stock: '',
     description: '',
     image: '',
-    featured: false
+    featured: false,
+    uploadedImages: []
   });
 
   useEffect(() => {
@@ -60,7 +61,8 @@ export default function Products() {
         stock: product.stock,
         description: product.description,
         image: product.image,
-        featured: product.featured || false
+        featured: product.featured || false,
+        uploadedImages: product.uploadedImages || []
       });
     } else {
       setEditingProduct(null);
@@ -74,7 +76,8 @@ export default function Products() {
         stock: '', 
         description: '', 
         image: '', 
-        featured: false 
+        featured: false,
+        uploadedImages: []
       });
     }
     setIsModalOpen(true);
@@ -118,6 +121,32 @@ export default function Products() {
         : [...prev.sizes, size];
       return { ...prev, sizes };
     });
+  };
+
+  const handleFileUpload = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setFormData(prev => ({
+          ...prev,
+          uploadedImages: [...prev.uploadedImages, {
+            id: uuidv4(),
+            data: event.target.result,
+            name: file.name
+          }]
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = '';
+  };
+
+  const removeUploadedImage = (imageId) => {
+    setFormData(prev => ({
+      ...prev,
+      uploadedImages: prev.uploadedImages.filter(img => img.id !== imageId)
+    }));
   };
 
   const filteredProducts = products.filter(p => {
@@ -377,6 +406,53 @@ export default function Products() {
               {formData.image && (
                 <div className="mt-3">
                   <img src={formData.image} alt="Preview" className="w-24 h-32 object-cover border border-brand-tertiary/40" onError={(e) => e.target.style.display='none'} />
+                </div>
+              )}
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-brand-dark mb-1">Or Upload Image Files</label>
+              <div className="border-2 border-dashed border-brand-tertiary/50 hover:border-brand-primary transition-colors p-4 rounded-none bg-brand-bg/20">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="product-file-input"
+                />
+                <label
+                  htmlFor="product-file-input"
+                  className="flex flex-col items-center justify-center cursor-pointer gap-2"
+                >
+                  <Upload className="w-6 h-6 text-brand-dark/40" />
+                  <span className="text-sm font-medium text-brand-dark/60">Click to upload or drag images here</span>
+                  <span className="text-xs text-brand-dark/40">Supports: JPG, PNG, GIF, WebP - Upload multiple images</span>
+                </label>
+              </div>
+
+              {formData.uploadedImages.length > 0 && (
+                <div className="mt-4">
+                  <label className="block text-xs font-medium text-brand-dark/70 mb-3 uppercase">Uploaded Files ({formData.uploadedImages.length})</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {formData.uploadedImages.map((img) => (
+                      <div key={img.id} className="relative group">
+                        <img
+                          src={img.data}
+                          alt={img.name}
+                          className="w-full h-24 object-cover border border-brand-tertiary/40"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeUploadedImage(img.id)}
+                          className="absolute top-1 right-1 bg-red-500 text-white p-1 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                        <p className="text-xs text-brand-dark/60 mt-1 truncate">{img.name}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
