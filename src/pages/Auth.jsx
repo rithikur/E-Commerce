@@ -42,7 +42,7 @@ export default function Auth() {
 
       if (customer) {
         localStorage.setItem('ub_customer_session', JSON.stringify({ id: customer.id, name: customer.name, email: customer.email }));
-        navigate('/');
+        window.location.href = '/';
       } else {
         setError('Invalid email or password.');
       }
@@ -78,7 +78,7 @@ export default function Auth() {
 
       // Auto-login after registration
       localStorage.setItem('ub_customer_session', JSON.stringify({ id: newCustomer.id, name: newCustomer.name, email: newCustomer.email }));
-      navigate('/');
+      window.location.href = '/';
     }
   };
 
